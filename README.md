@@ -47,8 +47,6 @@ FROM thmhoag/steamcmd:latest
 RUN steamcmd +app_update 1 +quit
 ```
 
-Images that inherit from this one should include instructions to mount the `/home/steam/Steam` directory as a volume. This ensures that the `Steam` cache and any workshop files or mods will persist after the container stops/restarts.
-
 ### Root/User Caveat
 
 By default, this image runs as the `steam` user and does not have root access inside the container. This is partially due to the way that `steamcmd` expects to be run as a user with the name `steam`, but also for the increased security of not having root inside the container.
@@ -70,7 +68,7 @@ If you need root access during the execution of the game server you will need to
 
 To run by itself:
 ```bash
-$ docker run -it -v /home/steam/Steam thmhoag/steamcmd bash
+$ docker run -it thmhoag/steamcmd bash
 ```
 
 ## Contributing

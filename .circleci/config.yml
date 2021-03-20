@@ -1,0 +1,24 @@
+version: 2.1
+jobs:
+  build:
+    environment:
+      REPO: drpsychick
+      IMAGE_NAME: steamcmd
+      TAG: latest
+    docker:
+      - image: docker:git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker image
+          command: |
+            docker build -t $REPO/$IMAGE_NAME:$TAG .
+      - deploy:
+          name: Push Docker image
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin &> /dev/null || exit 1
+              docker push $REPO/$IMAGE_NAME:$TAG
+            fi
+

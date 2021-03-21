@@ -8,36 +8,32 @@ aliases:
       - run:
           name: Build Docker image
           command: |
-            docker build -t $REPO/$IMAGE_NAME:$TAG .
+            docker build -t $REPO/$IMAGE_NAME:$UBUNTU_VERSION --build-arg UBUNTU_VERSION=$UBUNTU_VERSION .
       - run:
           name: Push Docker image
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin &> /dev/null || exit 1
-              docker push $REPO/$IMAGE_NAME:$TAG
+              docker push $REPO/$IMAGE_NAME:$UBUNTU_VERSION
               fi
 jobs:
   build_latest:
     environment:
-      TAG: latest
       UBUNTU_VERSION: latest
     docker: *docker
     steps: *steps
   build_focal:
     environment:
-      TAG: focal
       UBUNTU_VERSION: focal
     docker: *docker
     steps: *steps
   build_eoan:
     environment:
-      TAG: eoan
       UBUNTU_VERSION: eoan
     docker: *docker
     steps: *steps
   build_xenial:
     environment:
-      TAG: xenial
       UBUNTU_VERSION: xenial
     docker: *docker
     steps: *steps

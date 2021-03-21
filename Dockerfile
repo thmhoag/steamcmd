@@ -5,7 +5,7 @@ RUN dpkg --add-architecture i386 \
     && apt-get update && apt-get upgrade -y \
     && echo steam steam/question select "I AGREE" | debconf-set-selections \
     && echo steam steam/license note '' | debconf-set-selections \
-    && apt-get install -y ca-certificates steamcmd locales \
+    && apt-get install -y ca-certificates lib32gcc1 steamcmd locales \
     && locale-gen en_US.UTF-8 \
     && apt-get autoremove -y \
     && apt-get clean -y \

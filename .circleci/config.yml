@@ -27,9 +27,9 @@ jobs:
       UBUNTU_VERSION: focal
     docker: *docker
     steps: *steps
-  build_eoan:
+  build_bionic:
     environment:
-      UBUNTU_VERSION: eoan
+      UBUNTU_VERSION: bionic
     docker: *docker
     steps: *steps
   build_xenial:

@@ -15,7 +15,7 @@ aliases:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin &> /dev/null || exit 1
               docker push $REPO/$IMAGE_NAME:$UBUNTU_VERSION
-              fi
+            fi
 jobs:
   build_latest:
     environment:
@@ -43,6 +43,6 @@ workflows:
   build:
     jobs:
       - build_xenial
-      - build_eoan
+      - build_bionic
       - build_focal
       - build_latest

@@ -1,24 +1,52 @@
 version: 2.1
-jobs:
-  build:
-    environment:
-      REPO: drpsychick
-      IMAGE_NAME: steamcmd
-      TAG: latest
-    docker:
+aliases:
+  - &docker
       - image: docker:git
-    steps:
+  - &steps
       - checkout
       - setup_remote_docker
       - run:
           name: Build Docker image
           command: |
             docker build -t $REPO/$IMAGE_NAME:$TAG .
-      - deploy:
+      - run:
           name: Push Docker image
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin &> /dev/null || exit 1
               docker push $REPO/$IMAGE_NAME:$TAG
-            fi
+              fi
+jobs:
+  build_latest:
+    environment:
+      TAG: latest
+      UBUNTU_VERSION: latest
+    docker: *docker
+    steps: *steps
+  build_focal:
+    environment:
+      TAG: focal
+      UBUNTU_VERSION: focal
+    docker: *docker
+    steps: *steps
+  build_eoan:
+    environment:
+      TAG: eoan
+      UBUNTU_VERSION: eoan
+    docker: *docker
+    steps: *steps
+  build_xenial:
+    environment:
+      TAG: xenial
+      UBUNTU_VERSION: xenial
+    docker: *docker
+    steps: *steps
 
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build_xenial
+      - build_eoan
+      - build_focal
+      - build_latest
